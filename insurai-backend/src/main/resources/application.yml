@@ -1,0 +1,119 @@
+# ═══════════════════════════════════════════════════════════════
+# INSURAI - Application Configuration
+# ═══════════════════════════════════════════════════════════════
+
+spring:
+  application:
+    name: insurai-backend
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/insurai
+    username: insurai_user
+    password: insurai_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+    open-in-view: false
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/insurai_docs
+      auto-index-creation: true
+
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    timeout: 60000
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+
+jwt:
+  secret: insurai-super-secret-key-change-in-production-must-be-at-least-256-bits-long-for-hs256
+  expiration: 86400000
+  refresh-expiration: 604800000
+
+app:
+  name: INSURAI
+  version: 1.0.0
+  frontend-url: http://localhost:5173
+  file-storage:
+    type: local
+    local-path: ./uploads
+  ai:
+    fraud-threshold: 70
+    risk-threshold-critical: 80
+    risk-threshold-high: 60
+    risk-threshold-medium: 40
+    model-version: v2.4.1
+
+logging:
+  level:
+    root: INFO
+    com.insurai: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: logs/insurai.log
+    max-size: 10MB
+    max-history: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    mail:
+      enabled: false
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method

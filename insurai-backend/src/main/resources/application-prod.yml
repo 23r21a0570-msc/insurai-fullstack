@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════════
+# INSURAI - Production Environment Configuration
+# ═══════════════════════════════════════════════════════════════
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate  # Don't auto-update schema in production
+
+  # Production database (use environment variables)
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/insurai}
+    username: ${DATABASE_USER:insurai_user}
+    password: ${DATABASE_PASSWORD:insurai_pass}
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/insurai_docs}
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+
+logging:
+  level:
+    root: WARN
+    com.insurai: INFO
+    org.springframework.security: WARN
+
+  file:
+    name: /var/log/insurai/application.log
+    max-size: 50MB
+    max-history: 90
+
+app:
+  frontend-url: ${FRONTEND_URL:https://insurai.com}
+
+  file-storage:
+    type: s3
+    s3-bucket: ${S3_BUCKET:insurai-production-documents}
+
+jwt:
+  secret: insurai-super-secret-key-change-in-production-must-be-at-least-256-bits-long-for-hs256

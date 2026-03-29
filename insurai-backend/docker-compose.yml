@@ -1,0 +1,67 @@
+services:
+  # ═══════════════════════════════════════════════════════════════
+  # PostgreSQL - Main Database
+  # ═══════════════════════════════════════════════════════════════
+  postgres:
+    image: postgres:16-alpine
+    container_name: insurai-postgres
+    environment:
+      POSTGRES_DB: insurai
+      POSTGRES_USER: insurai_user
+      POSTGRES_PASSWORD: insurai_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - insurai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U insurai_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ═══════════════════════════════════════════════════════════════
+  # MongoDB - Document Storage (for claim documents & logs)
+  # ═══════════════════════════════════════════════════════════════
+  mongodb:
+    image: mongo:7
+    container_name: insurai-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - insurai-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ═══════════════════════════════════════════════════════════════
+  # Redis - Cache & Sessions
+  # ═══════════════════════════════════════════════════════════════
+  redis:
+    image: redis:7-alpine
+    container_name: insurai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - insurai-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  mongo_data:
+  redis_data:
+
+networks:
+  insurai-network:
+    driver: bridge
