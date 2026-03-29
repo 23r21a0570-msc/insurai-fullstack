@@ -66,7 +66,7 @@ Backend runs on: `http://localhost:8080`
 
 ### 4️⃣ Start Frontend
 ```bash
-cd insurai-frontend
+cd frontend-implementation-setup (1)
 npm install
 npm run dev
 ```
@@ -99,7 +99,7 @@ insurai-fullstack/
 │   ├── security/             # JWT authentication
 │   └── docker-compose.yml    # Database containers
 │
-└── insurai-frontend/         # React + TypeScript
+└── insurai-frontend-implementation-setup (1)/         # React + TypeScript
     ├── components/           # Reusable UI components
     ├── pages/                # Application pages
     ├── api/                  # API services
@@ -159,7 +159,7 @@ cd insurai-backend
 mvn test
 
 # Frontend tests
-cd insurai-frontend
+cd frontend-implementation-setup (1)
 npm run test
 ```
 
@@ -170,8 +170,7 @@ npm run test
 ```bash
 # Build images
 docker build -t insurai-backend ./insurai-backend
-docker build -t insurai-frontend ./insurai-frontend
-
+docker build -t frontend-implementation-setup (1) ./frontend-implementation-setup (1)
 # Run containers
 docker-compose up -d
 ```
